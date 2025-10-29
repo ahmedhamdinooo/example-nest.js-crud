@@ -23,7 +23,7 @@
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Mastering NestJS — a small example API demonstrating Nest fundamentals (modules, controllers, services, DTOs, validation) via a simple Product domain. This README provides setup, configuration, folder structure, coding standards, and API usage.
 
 ## Project setup
 
@@ -57,18 +57,93 @@ $ pnpm run test:e2e
 $ pnpm run test:cov
 ```
 
-## Deployment
+## Configuration
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+- **Environment variables**
+  - `PORT`: HTTP port to listen on (default `3000`).
+  - Add a `.env` at project root if needed and load it via `@nestjs/config` (optional; not yet configured in this repo).
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+- **Validation**
+  - Global `ValidationPipe` is enabled with `whitelist: true` and `forbidNonWhitelisted: true` to enforce DTO schemas.
 
-```bash
-$ pnpm install -g @nestjs/mau
-$ mau deploy
+- **Package manager**
+  - The project uses `pnpm`. You can switch to `npm` or `yarn` if preferred, but update commands accordingly.
+
+## Folder structure
+
+```
+src/
+  app.module.ts            # Root application module
+  app.controller.ts        # Example controller (hello route)
+  app.service.ts           # Example service (hello string)
+  main.ts                  # Application bootstrap
+  product/
+    product.module.ts      # Product feature module
+    product.controller.ts  # Product routes and request handling
+    product.service.ts     # Product business logic and in-memory data
+    dto/                   # Product DTOs (validation schemas)
+      create-product.dto.ts
+      update-product.dto.ts
+      query-product.dto.ts
+    interfaces/
+      product.interfaces.ts
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+## Architecture and DI
+
+- **Modules** group related providers and controllers. `AppModule` imports `ProductModule`.
+- **Controllers** handle HTTP concerns (routing, params, status codes). `ProductController` maps incoming requests to the service layer.
+- **Services** contain business logic and are injected into controllers using Nest's **Dependency Injection** container.
+- **DTOs** validate and type request payloads using `class-validator` decorators.
+- **Interfaces** define domain shapes used internally (e.g., `Product`).
+
+## Coding standards
+
+- **General**
+  - Use PascalCase for classes (`CreateProductDto`), camelCase for methods and variables.
+  - Keep controllers thin; push business logic into services.
+  - Prefer immutability and pure functions where possible.
+  - Follow SOLID: single-responsibility services, depend on abstractions where useful.
+
+- **NestJS**
+  - Use feature modules to isolate domains.
+  - Use DTOs for all inputs; avoid accepting raw objects.
+  - Leverage `ValidationPipe` and transformation as needed.
+
+- **Types & comments**
+  - Add JSDoc to modules, controllers, services, DTOs, and interfaces.
+  - Document params, return types, and exceptions.
+
+## API usage
+
+Base URL: `http://localhost:3000`
+
+- `GET /` — returns hello string.
+
+- `GET /product`
+  - Query params: `page`, `limit`, `category`, `minPrice`, `maxPrice`, `search`, `sortBy` (`name|price|createdAt`), `order` (`ASC|DESC`)
+  - Returns paginated and filtered products.
+
+- `GET /product/:id`
+  - Returns a single product by id.
+
+- `GET /product/category/:categoryName`
+  - Returns products filtered by category.
+
+- `POST /product`
+  - Body: `CreateProductDto`
+  - Creates and returns a new product (in-memory example).
+
+- `PATCH /product/:id`
+  - Body: `UpdateProductDto` (partial updates supported)
+  - Updates a product (in-memory example).
+
+- `DELETE /product/:id`
+  - Deletes a product (in-memory example).
+
+## Deployment
+
+See Nest official [deployment docs](https://docs.nestjs.com/deployment). Choose any Node hosting provider; ensure Node LTS, environment variables, and a process manager (PM2/Systemd) or container runtime.
 
 ## Resources
 
@@ -89,10 +164,9 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 
 ## Stay in touch
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+- Author - [Ahmed hamdy](https://twitter.com/kammysliwiec)
+
 
 ## License
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+Nest is [MIT licensed](https://github.com/ahmedhamdinooo/example-nest.js-crud).

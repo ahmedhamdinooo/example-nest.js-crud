@@ -1,3 +1,6 @@
+/**
+ * Represents a product entity used throughout the application.
+ */
 export interface Product {
   id: number;
   name: string;

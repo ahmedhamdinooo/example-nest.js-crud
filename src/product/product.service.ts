@@ -1,7 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { Product } from './interfaces/product.interfaces';
+
+/**
+ * Service providing in-memory product data and operations.
+ * In a real application, this would integrate with a repository or database.
+ */
 @Injectable()
 export class ProductService {
+  /** In-memory list of products serving as a mock data store. */
   private products: Product[] = [
     {
       id: 1,
@@ -27,7 +33,14 @@ export class ProductService {
     },
   ];
 
-  findALlproducts(): Product[] {
+
+  /**
+   * Returns all available products.
+   * @returns Array of products in memory.
+   */
+  findAllProducts(): Product[] {
     return this.products;
   }
 }
+
+

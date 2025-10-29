@@ -1,6 +1,5 @@
 import {
   IsBoolean,
-  IsNotEmpty,
   IsNumber,
   IsOptional,
   IsString,
@@ -9,33 +8,33 @@ import {
 } from 'class-validator';
 
 /**
- * DTO for creating a new product.
+ * DTO for partially updating an existing product.
  */
-export class CreateProductDto {
+export class UpdateProductDto {
   /** Product name */
   @IsString()
-  @IsNotEmpty()
-  name: string;
+  @IsOptional()
+  name?: string;
   /** Optional product description */
   @IsString()
   @IsOptional()
   @Length(10, 100)
-  description: string;
+  description?: string;
   /** Price must be >= 0 */
   @IsNumber()
-  @IsNotEmpty()
+  @IsOptional()
   @Min(0)
-  price: number;
+  price?: number;
   /** Available stock */
   @IsNumber()
-  @IsNotEmpty()
-  stock: number;
+  @IsOptional()
+  stock?: number;
   /** Product category */
   @IsString()
-  @IsNotEmpty()
-  category: string;
+  @IsOptional()
+  category?: string;
   /** Whether the product is active */
   @IsBoolean()
-  @IsNotEmpty()
-  isActive: boolean;
+  @IsOptional()
+  isActive?: boolean;
 }
